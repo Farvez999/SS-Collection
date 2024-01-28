@@ -5,7 +5,7 @@ const response = require('../helpers/response');
 const isValidUser = async (req, res, next) => {
     try {
         const { authorization } = req.headers;
-        console.log("sdfopopr", authorization);
+        // console.log("sdfopopr", authorization);
         let token;
         let decodedData;
         if (authorization && authorization.startsWith("Bearer")) {
@@ -18,7 +18,7 @@ const isValidUser = async (req, res, next) => {
         } else if (!decodedData) {
             res.status(403).json({ error: 'Unauthorized' });
         }
-        console.log(decodedData, '----------------->');
+        // console.log(decodedData, '----------------->');
         req.body.userId = decodedData._id;
         req.body.userRole = decodedData.role;
         console.log(req.body.userId)

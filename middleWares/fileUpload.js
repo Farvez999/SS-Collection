@@ -39,6 +39,7 @@ const configureFileUpload = (destinationPath) => {
         { name: 'bannerImage', maxCount: 1 },
         { name: 'categoryImage', maxCount: 1 },
         { name: 'productImage', maxCount: 1 },
+        { name: 'sliderImage', maxCount: 1 },
         { name: 'categoryVideo', maxCount: 1 },
         { name: 'image', maxCount: 1 },
     ]);

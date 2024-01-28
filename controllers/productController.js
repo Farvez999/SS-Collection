@@ -65,6 +65,18 @@ const getProduct = async (req, res, next) => {
   }
 };
 
+const getCategoryWise = async (req, res, next) => {
+  try {
+    const categoryId = req.params.id
+    const category = await Product.find({ categoryId: categoryId });
+
+    // console.log("=====>", category)
+    res.status(200).json(response({ message: "Category fetched successfully", status: 200, data: category, type: "category" }));
+  } catch (error) {
+    next(createError(error));
+  }
+};
+
 const updateProduct = async (req, res, next) => {
   let user = await User.findById(req.user);
 
@@ -158,4 +170,6 @@ const deleteProduct = async (req, res, next) => {
 
 };
 
-module.exports = { createProduct, getProducts, getProduct, updateProduct, deleteProduct };
+
+
+module.exports = { createProduct, getProducts, getProduct, updateProduct, deleteProduct, getCategoryWise };
