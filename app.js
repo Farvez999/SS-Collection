@@ -10,6 +10,9 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/userRouter');
 var categoryRouter = require('./routes/categoryRouter');
 var productRouter = require('./routes/productRouter');
+var wishlistRouter = require('./routes/wishlistRouter');
+var sliderRouter = require('./routes/sliderRouter');
+var productFolderRouter = require('./routes/productFolderRouter');
 
 var app = express();
 
@@ -33,6 +36,12 @@ app.use('/', indexRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/category', categoryRouter);
 app.use('/api/product', productRouter);
+app.use('/api/wishlist', wishlistRouter);
+app.use('/api/slider', sliderRouter);
+app.use('/api/product-folder', productFolderRouter);
+
+
+app.use('/public/image', express.static(__dirname + '/public/image'))
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

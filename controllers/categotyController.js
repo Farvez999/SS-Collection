@@ -2,6 +2,7 @@ const createError = require('http-errors');
 const response = require("../helpers/response");
 const Category = require('../models/Category');
 const User = require('../models/User');
+const Product = require('../models/Product');
 
 //Create categories
 const createCategory = async (req, res, next) => {
@@ -39,6 +40,7 @@ const getCategory = async (req, res, next) => {
     next(createError(error));
   }
 };
+
 
 const updateCategory = async (req, res, next) => {
   let user = await User.findById(req.user);
@@ -129,4 +131,4 @@ const deleteCategory = async (req, res, next) => {
 
 };
 
-module.exports = { createCategory, getCategory, updateCategory, deleteCategory };
+module.exports = { createCategory, getCategory, updateCategory, deleteCategory, };
