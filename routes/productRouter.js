@@ -8,8 +8,8 @@ const UPLOADS_FOLDER_USERS = "../public/image";
 const productContent = configureFileUpload(UPLOADS_FOLDER_USERS);
 
 
-router.post('/', [productContent], isValidUser, createProduct);
-router.put('/:id', userauthmiddleware.isValidUser, [productContent], updateProduct);
+router.post('/', [productContent], createProduct);
+router.put('/:id', [productContent], updateProduct);
 router.get('/', getProducts);
 router.get('/:id', getProduct);
 router.get('/category-wise/:id', getCategoryWise);
