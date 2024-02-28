@@ -2,6 +2,7 @@ const createError = require('http-errors');
 const response = require("../helpers/response");
 const Slider = require('../models/Slider');
 const User = require('../models/User');
+const { createFileDetails } = require('../helpers/image.helper');
 
 //Create categories
 const createSlider = async (req, res, next) => {
@@ -9,7 +10,7 @@ const createSlider = async (req, res, next) => {
     let sliderImage = "";
 
     if (req.files && req.files.sliderImage && req.files.sliderImage[0]) {
-      sliderImage = `${req.protocol}://${req.get('host')}/public/image/${req.files.sliderImage[0].filename}`;
+      sliderImage = createFileDetails('image', req?.files?.sliderImage[0].filename);
     }
 
 

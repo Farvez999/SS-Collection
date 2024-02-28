@@ -3,6 +3,7 @@ const response = require("../helpers/response");
 const Product = require('../models/Product');
 const Category = require('../models/Category');
 const User = require('../models/User');
+const { createFileDetails } = require('../helpers/image.helper');
 
 //Create categories
 const createProduct = async (req, res, next) => {
@@ -28,8 +29,12 @@ const createProduct = async (req, res, next) => {
     let productImage = "";
 
     if (req.files && req.files.productImage && req.files.productImage[0]) {
-      productImage = `${req.protocol}://${req.get('host')}/public/image/${req.files.productImage[0].filename}`;
+      productImage = createFileDetails('image', req?.files?.productImage[0].filename);
     }
+
+    // if (req.files && req.files.productImage && req.files.productImage[0]) {
+    //   productImage = createFileDetails('image', req?.files?.productImage[0].filename)
+    // }
 
 
     const product = await Product.create({
@@ -91,7 +96,7 @@ const updateProduct = async (req, res, next) => {
         let productImage = "";
 
         if (req.files.productImage[0]) {
-          productImage = `${req.protocol}://${req.get('host')}/public/image/${req.files.productImage[0].filename}`;
+          productImage = createFileDetails('image', req?.files?.productImage[0].filename);
         }
         let updateData = {
           productName,

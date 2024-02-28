@@ -3,6 +3,7 @@ const response = require("../helpers/response");
 const Category = require('../models/Category');
 const User = require('../models/User');
 const Product = require('../models/Product');
+const { createFileDetails } = require('../helpers/image.helper');
 
 //Create categories
 const createCategory = async (req, res, next) => {
@@ -15,8 +16,12 @@ const createCategory = async (req, res, next) => {
 
     let categoryImage = "";
 
+    // if (req.files && req.files.categoryImage && req.files.categoryImage[0]) {
+    //   categoryImage = `${req.protocol}://${req.get('host')}/public/image/${req.files.categoryImage[0].filename}`;
+    // }
+
     if (req.files && req.files.categoryImage && req.files.categoryImage[0]) {
-      categoryImage = `${req.protocol}://${req.get('host')}/public/image/${req.files.categoryImage[0].filename}`;
+      categoryImage = createFileDetails('image', req?.files?.categoryImage[0].filename)
     }
 
 
@@ -55,8 +60,11 @@ const updateCategory = async (req, res, next) => {
       if (req.files && req.files['categoryImage']) {
         let categoryimage = "";
 
-        if (req.files.categoryImage[0]) {
-          categoryimage = `${req.protocol}://${req.get('host')}/public/image/${req.files.categoryImage[0].filename}`;
+        // if (req.files.categoryImage[0]) {
+        //   categoryimage = `${req.protocol}://${req.get('host')}/public/image/${req.files.categoryImage[0].filename}`;
+        // }
+        if (req.files && req.files.categoryImage && req.files.categoryImage[0]) {
+          categoryimage = createFileDetails('image', req?.files?.categoryImage[0].filename)
         }
         let updateData = {
           name,
