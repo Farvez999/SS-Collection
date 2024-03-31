@@ -7,7 +7,7 @@ const UPLOADS_FOLDER_USERS = "../public/image";
 const uploadContent = configureFileUpload(UPLOADS_FOLDER_USERS);
 
 
-router.post('/', userauthmiddleware.isValidUser, [uploadContent], createCategory);
+router.post('/add', userauthmiddleware.isValidUser, createCategory);
 router.put('/:id', userauthmiddleware.isValidUser, [uploadContent], updateCategory);
 router.get('/', getCategory);
 router.delete('/:id', userauthmiddleware.isValidUser, deleteCategory);

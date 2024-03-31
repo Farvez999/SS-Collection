@@ -12,7 +12,7 @@ const isValidUser = async (req, res, next) => {
             token = authorization.split(" ")[1];
             //console.log(token);
             decodedData = jwt.verify(token, process.env.JWT_SECRET_KEY);
-            console.log("sdfdfds", decodedData);
+            console.log("Auth Message", decodedData);
         } else if (!authorization) {
             res.status(403).json({ error: 'Unauthorized' });
         } else if (!decodedData) {

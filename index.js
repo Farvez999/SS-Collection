@@ -2,9 +2,10 @@ let createError = require('http-errors');
 let express = require('express');
 let path = require('path');
 let cookieParser = require('cookie-parser');
-let logger = require('morgan');
 require('dotenv').config();
 const mongoose = require('mongoose');
+const cors = require('cors');
+const bodyParser = require('body-parser')
 
 let indexRouter = require('./routes/index');
 let usersRouter = require('./routes/userRouter');
@@ -17,6 +18,23 @@ let productFolderRouter = require('./routes/productFolderRouter');
 let app = express();
 const PORT = process.env.PORT || 3000
 // Connect to the MongoDB database
+
+
+// For handling form data
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+
+// Middleware
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cors(
+  {
+    origin: "*",
+    optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+  }
+));
+
+// mongoose.connect('mongodb+srv://ssCollectionDBUser:7cdcJ0g7J5vuSrsc@cluster0.mordayw.mongodb.net/ss_collection?retryWrites=true&w=majority')
 
 const main = async () => {
   try {
@@ -39,14 +57,12 @@ const main = async () => {
 
 main();
 
-
-app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
+// app.use('/', indexRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/category', categoryRouter);
 app.use('/api/product', productRouter);
@@ -70,10 +86,10 @@ app.use(function (err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error');
+  // res.render('error');
 });
 
-app.listen(3005, () => {
+app.listen(3005, '192.168.10.14', () => {
   console.log(`Server started on port 3005`);
 });
 

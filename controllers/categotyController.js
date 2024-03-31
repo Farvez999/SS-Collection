@@ -7,23 +7,13 @@ const { createFileDetails } = require('../helpers/image.helper');
 
 //Create categories
 const createCategory = async (req, res, next) => {
+
   try {
-    const { name } = req.body;
+    const { name, categoryImage } = req.body;
 
     if (name === "") {
       return res.status(400).json({ status: 400, message: "Category Name is required" });
     }
-
-    let categoryImage = "";
-
-    // if (req.files && req.files.categoryImage && req.files.categoryImage[0]) {
-    //   categoryImage = `${req.protocol}://${req.get('host')}/public/image/${req.files.categoryImage[0].filename}`;
-    // }
-
-    if (req.files && req.files.categoryImage && req.files.categoryImage[0]) {
-      categoryImage = createFileDetails('image', req?.files?.categoryImage[0].filename)
-    }
-
 
     const category = await Category.create({
       name: name,
@@ -32,8 +22,8 @@ const createCategory = async (req, res, next) => {
 
     res.status(201).json(response({ message: "Category created successfully", status: 201, data: category, type: "category" }));
   } catch (error) {
-    console.error(error.message);
-    next(createError(error));
+    // next(createError(error));
+    console.log(error)
   }
 };
 
