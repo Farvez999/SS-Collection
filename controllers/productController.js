@@ -191,7 +191,7 @@ const searchProduct = async (req, res, next) => {
   console.log(req.query)
 
   const userModel = new QueryBuilder(Product.find(), req.query)
-    .search()
+    .search(['productDescription'])
     .filter()
     .paginate()
     .sort()
@@ -204,50 +204,7 @@ const searchProduct = async (req, res, next) => {
 
   res.json({ result });
 
-  // if (!keyword) {
-  //   return res.status(400).json({ error: 'Keyword parameter is required' });
-  // }
-
-  // const products = await Product.find();
-  // // console.log(products)
-
-  // // Filter products based on keyword in productName or productDescription
-  // const filteredProducts = products.filter(product =>
-  //   // product.productName.toLowerCase().includes(keyword.toLowerCase()) ||
-  //   (typeof product.productDescription === 'string' && product.productDescription.toLowerCase().includes(keyword.toLowerCase()))
-  // );
-
-  // res.json({ products: filteredProducts });
 }
-
-// const findKeywords = async (body) => {
-
-//   const uniqueKeywords = await Product.aggregate([
-
-//     // Unwind the array to get separate documents for each keyword
-//     { $unwind: "$keywords" },
-//     // Group by keyword and count occurrences
-//     {
-//       $group: {
-//         _id: "$keywords",
-//         count: { $sum: 1 }
-//       }
-//     },
-//     // Project to rename fields and sort by keyword
-//     {
-//       $project: {
-//         keyword: "$_id",
-//         count: 1,
-//         _id: 0
-//       }
-//     },
-//     // Sort by keyword alphabetically
-//     { $sort: { count: -1 } }
-//   ]);
-
-//   return uniqueKeywords
-
-// }
 
 
 
