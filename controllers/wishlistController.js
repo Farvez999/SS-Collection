@@ -49,5 +49,29 @@ const getWishlist = async (req, res, next) => {
   }
 };
 
+const myWishlist = async (req, res, next) => {
+  try {
+    const { userId } = req.query; // Assuming email is passed as a query parameter
+    console.log(req.query)
 
-module.exports = { createWishlist, getWishlists, getWishlist }; 
+    if (!userId) {
+      return res.status(400).json({ message: "User Id is required" });
+    }
+
+    const wishlist = await Wishlist.find({ userId });
+
+    if (!wishlist.length) {
+      return res.status(404).json({ message: "No wishlist found for this email" });
+    }
+
+    res.status(200).json({ wishlist });
+  } catch (error) {
+    next(error); // Pass the error to the global error handler
+  }
+};
+
+module.exports = myWishlist;
+
+
+
+module.exports = { createWishlist, getWishlists, getWishlist, myWishlist }; 

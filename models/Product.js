@@ -14,6 +14,7 @@ const productSchema = new mongoose.Schema({
         type: Number,
         required: [true, "Product price must be required"]
     },
+    note: { type: String },
     categoryId: { type: mongoose.Schema.Types.ObjectId, ref: 'Category', required: true },
 });
 

@@ -89,7 +89,7 @@ app.use(function (err, req, res, next) {
   // res.render('error');
 });
 
-app.listen(3005, '192.168.10.14', () => {
+app.listen(3005, '192.168.10.182', () => {
   console.log(`Server started on port 3005`);
 });
 

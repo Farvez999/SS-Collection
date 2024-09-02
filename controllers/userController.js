@@ -19,48 +19,16 @@ const signUp = async (req, res) => {
       return res.status(409).json({ message: 'User already exists! Please login' });
     }
 
-    // Generate OTC (One-Time Code)
-    const oneTimeCode = Math.floor(Math.random() * (999999 - 100000 + 1)) + 100000;
-
     // Create the user in the database
     const user = await User.create({
       fullName,
       email,
       phoneNumber,
       password,
-      oneTimeCode,
     });
 
-    // Prepare email for activate user
-    const emailData = {
-      email,
-      subject: 'Account Activation Email',
-      html: `
-        <h1>Hello, ${user.fullName}</h1>
-        <p>Your One Time Code is <h3>${oneTimeCode}</h3> to reset your password</p>
-        <p>Please click on the following link to <a href='${process.env.CLIENT_URL}/api/user/activate'>activate your account</a></p>
-        <small>This Code is valid for 3 minutes</small>
-        `
-    }
-
-    // Send email
-    try {
-      emailWithNodemailer(emailData);
-      res.status(201).json({ message: 'Thanks! Please check your E-mail to verify.' });
-    } catch (emailError) {
-      console.error('Failed to send verifiaction email', emailError);
-    }
-
-    // Set a timeout to update the oneTimeCode to null after 1 minute
-    setTimeout(async () => {
-      try {
-        user.oneTimeCode = null;
-        await user.save();
-        console.log('oneTimeCode reset to null after 3 minute');
-      } catch (error) {
-        console.error('Error updating oneTimeCode:', error);
-      }
-    }, 180000); // 3 minute in milliseconds
+    // Respond with success message
+    res.status(201).json({ message: 'User registered successfully!' });
 
   } catch (error) {
     console.log(error.message);
