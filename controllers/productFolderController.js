@@ -4,226 +4,7 @@ const Product = require('../models/Product');
 const Category = require('../models/Category');
 const User = require('../models/User');
 const ProductFolder = require('../models/ProductFolder');
-
-//Create categories
-// const createProduct = async (req, res, next) => {
-//   try {
-//     const { productName, productDescription, productPrice, categoryId } = req.body;
-
-//     if (productName === "") {
-//       return res.status(400).json({ status: 400, message: "Product Name is required" });
-//     }
-//     if (productDescription === "") {
-//       return res.status(400).json({ status: 400, message: "Product Description is required" });
-//     }
-//     if (productPrice === "") {
-//       return res.status(400).json({ status: 400, message: "Product price is required" });
-//     }
-
-//     const existingCategory = await Category.findById(categoryId);
-
-//     if (!existingCategory) {
-//       return res.status(404).json(response({ message: 'Category Id is not valid', type: "categories", status: "OK", statusCode: 200 }));
-//     }
-
-//     let productImage = "";
-
-//     if (req.files && req.files.productImage && req.files.productImage[0]) {
-//       productImage = `${req.protocol}://${req.get('host')}/public/image/${req.files.productImage[0].filename}`;
-//     }
-
-
-//     const product = await Product.create({
-//       productName: productName,
-//       productDescription: productDescription,
-//       productPrice: productPrice,
-//       productImage: productImage,
-//       categoryId
-//     });
-
-//     res.status(201).json(response({ message: "Product created successfully", status: 201, data: product, type: "product" }));
-//   } catch (error) {
-//     console.error(error.message);
-//     next(createError(error));
-//   }
-// };
-
-// const getProductFolders = async (req, res, next) => {
-//   try {
-//     const productFolder = await ProductFolder.find();
-
-//     let user = await User.findById(req.user);
-//     const userId = user._id;
-//     console.log("dewrfewr", userId)
-
-//     const product = productFolder.find(folder => folder.userId.equals(userId));
-//     console.log("dewrfewr", product)
-
-//     res.status(200).json(response({ message: "Product fetched successfully", status: 200, data: product, type: "productFolder" }));
-//   } catch (error) {
-//     next(createError(error));
-//   }
-// };
-
-// const getProduct = async (req, res, next) => {
-//   try {
-//     const product = await Product.findById(req.params.id);
-//     res.status(200).json(response({ message: "Product fetched successfully", status: 200, data: product, type: "product" }));
-//   } catch (error) {
-//     next(createError(error));
-//   }
-// };
-
-// const getCategoryWise = async (req, res, next) => {
-//   try {
-//     const categoryId = req.params.id
-//     const category = await Product.find({ categoryId: categoryId });
-
-//     // console.log("=====>", category)
-//     res.status(200).json(response({ message: "Category fetched successfully", status: 200, data: category, type: "category" }));
-//   } catch (error) {
-//     next(createError(error));
-//   }
-// };
-
-// const updateProduct = async (req, res, next) => {
-//   let user = await User.findById(req.user);
-
-
-//   if (user.role == "admin") {
-//     try {
-//       const productId = await Product.findById(req.params.id);
-
-//       const { productName, productDescription, productPrice } = req.body;
-
-//       if (req.files && req.files['productImage']) {
-//         let productImage = "";
-
-//         if (req.files.productImage[0]) {
-//           productImage = `${req.protocol}://${req.get('host')}/public/image/${req.files.productImage[0].filename}`;
-//         }
-//         let updateData = {
-//           productName,
-//           productDescription,
-//           productPrice,
-//           productImage: productImage
-//         }
-//         // Use findByIdAndUpdate to partially update the category document
-//         const product = await Product.findByIdAndUpdate(
-//           productId,
-//           { $set: updateData }, // Use $set to update only the specified fields
-//           { new: true } // To return the updated document
-//         );
-
-//         if (!product) {
-//           return response(res.status(404).json({
-//             message: "Product not found",
-//             status: 404,
-//             data: null,
-//             type: "product",
-//           }));
-//         }
-
-//         res.status(200).json(response({ message: "Product updated successfully", status: 200, data: product, type: "product" }));
-//       } else {
-//         let updateData = {
-//           productName,
-//           productDescription,
-//           productPrice,
-//           productImage: productId.productImage
-//         }
-//         // Use findByIdAndUpdate to partially update the category document
-//         const product = await Product.findByIdAndUpdate(
-//           productId,
-//           { $set: updateData }, // Use $set to update only the specified fields
-//           { new: true } // To return the updated document
-//         );
-//         res.status(200).json(response({ message: "Product updated successfully", status: 200, data: product, type: "product" }));
-//       }
-
-//     } catch (error) {
-//       next(createError(error));
-//     }
-
-//   }
-
-// };
-
-// const deleteProduct = async (req, res, next) => {
-
-//   let user = await User.findById(req.user);
-
-
-//   if (user.role == "admin") {
-//     try {
-//       const productId = await Product.findById(req.params.id);
-
-//       if (!productId) {
-//         res.status(404).json(response({ message: "Product Id not found", status: 404, data: null, type: "product" }));
-//       }
-
-//       //delete category
-//       await Product.findByIdAndDelete(productId);
-
-//       res.status(200).json(response({ message: "Product deleted successfully", status: 200, data: null, type: "product" }));
-
-//     } catch (error) {
-//       next(createError(error));
-//     }
-
-//   } else {
-
-//     return res.status(401).json({ status: 401, message: "UnAuthorized user" });
-
-//   }
-
-// };
-
-// const createProductFolder = async (req, res, next) => {
-//   try {
-//     const { productName, productDescription, productPrice, categoryId } = req.body;
-
-//     let user = await User.findById(req.user);
-//     const userId = user._id;
-
-//     if (productName === "") {
-//       return res.status(400).json({ status: 400, message: "Product Name is required" });
-//     }
-//     if (productDescription === "") {
-//       return res.status(400).json({ status: 400, message: "Product Description is required" });
-//     }
-//     if (productPrice === "") {
-//       return res.status(400).json({ status: 400, message: "Product price is required" });
-//     }
-
-//     const existingCategory = await Category.findById(categoryId);
-
-//     if (!existingCategory) {
-//       return res.status(404).json(response({ message: 'Category Id is not valid', type: "categories", status: "OK", statusCode: 200 }));
-//     }
-
-//     let productImage = "";
-
-//     if (req.files && req.files.productImage && req.files.productImage[0]) {
-//       productImage = `${req.protocol}://${req.get('host')}/public/image/${req.files.productImage[0].filename}`;
-//     }
-
-
-//     const productFolder = await ProductFolder.create({
-//       productName: productName,
-//       productDescription: productDescription,
-//       productPrice: productPrice,
-//       productImage: productImage,
-//       categoryId,
-//       userId
-//     });
-
-//     res.status(201).json(response({ message: "Product Folder created successfully", status: 201, data: productFolder, type: "productFolder" }));
-//   } catch (error) {
-//     console.error(error.message);
-//     next(createError(error));
-//   }
-// };
+const mongoose = require('mongoose');
 
 
 const createFolderForProduct = async (req, res) => {
@@ -297,7 +78,8 @@ const getAllFoldersForUser = async (req, res) => {
     let folders = await ProductFolder.find({ userId: req.user}).populate('products.productId');
 
     if (!folders || folders.length === 0) {
-      return res.status(404).json({ message: 'No folders found for this user' });
+      // return res.status(404).json({ message: 'No folders found for this user' });
+      return res.status(200).json({ folders });
     }
 
     // Return the folders with their products and notes
@@ -337,5 +119,221 @@ const getProductFolder = async (req, res) => {
   }
 };
 
+const updateFolder = async (req, res) => {
+  try {
+    const { folderId } = req.params;
+    const { name } = req.body; // Assuming these are the fields you want to update
 
-module.exports = { createFolderForProduct, getAllFoldersForUser,getProductFolder };
+    // Validate folderId format
+    if (!mongoose.Types.ObjectId.isValid(folderId)) {
+      return res.status(400).json({ message: 'Invalid folder ID format' });
+    }
+
+    // Find the folder by ID
+    let folder = await ProductFolder.findById(folderId);
+
+    if (!folder) {
+      return res.status(404).json({ message: 'Folder not found' });
+    }
+    
+    // Ensure the folder belongs to the logged-in user
+    if (folder.userId.toString() !== req.user.toString()) {
+      return res.status(403).json({ message: 'Access denied' });
+    }
+    
+
+    // Update the folder
+    folder.folderName = name || folder.folderName;
+    await folder.save();
+
+    // Return the updated folder
+    res.status(200).json({ folder });
+
+  } catch (error) {
+    console.error('Error updating folder:', error);
+    res.status(500).json({ message: 'Error updating folder', error });
+  }
+};
+
+
+const deleteFolder = async (req, res) => {
+  try {
+    const { folderId } = req.params;
+
+    // Validate folderId format
+    if (!mongoose.Types.ObjectId.isValid(folderId)) {
+      return res.status(400).json({ message: 'Invalid folder ID format' });
+    }
+
+    // Find the folder by ID
+    let folder = await ProductFolder.findById(folderId);
+
+    if (!folder) {
+      return res.status(404).json({ message: 'Folder not found' });
+    }
+
+    // Ensure the folder belongs to the logged-in user
+    if (folder.userId.toString() !== req.user.toString()) {
+      return res.status(403).json({ message: 'Access denied' });
+    }
+
+    // Delete the folder
+    await ProductFolder.findByIdAndDelete(folderId);
+
+    // Return success message
+    res.status(200).json({ message: 'Folder successfully deleted' });
+
+  } catch (error) {
+    console.error('Error deleting folder:', error);
+    res.status(500).json({ message: 'Error deleting folder', error });
+  }
+};
+
+const updateProductNote = async (req, res) => {
+  try {
+    const { folderId, productId } = req.params;
+    const { note } = req.body; // New note content
+
+    // Validate folderId and productId format
+    if (!mongoose.Types.ObjectId.isValid(folderId) || !mongoose.Types.ObjectId.isValid(productId)) {
+      return res.status(400).json({ message: 'Invalid folder or product ID format' });
+    }
+
+    // Find the folder by ID
+    const folder = await ProductFolder.findById(folderId);
+    console.log("🚀 ~ updateProductNote ~ folder:", folder)
+
+    if (!folder) {
+      return res.status(404).json({ message: 'Folder not found' });
+    }
+    console.log("🚀 ~ updateProductNote ~ req.user:", req.user)
+    // Ensure the folder belongs to the logged-in user
+    if (folder.userId.toString() !== req.user.toString()) {
+      return res.status(403).json({ message: 'Access denied' });
+    }
+    
+
+    // Find the product in the folder
+    const product = folder.products.id(productId);
+
+    if (!product) {
+      return res.status(404).json({ message: 'Product not found in folder' });
+    }
+
+    // Update the product's note
+    product.note = note || product.note;
+
+    // Save the updated folder
+    await folder.save();
+
+    // Return the updated product with note
+    res.status(200).json({ product });
+
+  } catch (error) {
+    console.error('Error updating product note:', error);
+    res.status(500).json({ message: 'Error updating product note', error });
+  }
+};
+
+// const deleteProductFromFolder = async (req, res) => {
+//   try {
+//     const { folderId, productId } = req.params;
+
+//     // Validate folderId and productId format
+//     if (!mongoose.Types.ObjectId.isValid(folderId) || !mongoose.Types.ObjectId.isValid(productId)) {
+//       return res.status(400).json({ message: 'Invalid folder or product ID format' });
+//     }
+
+//     // Find the folder by ID
+//     let folder = await ProductFolder.findById(folderId);
+
+//     if (!folder) {
+//       return res.status(404).json({ message: 'Folder not found' });
+//     }
+
+//     // Ensure the folder belongs to the logged-in user
+//     if (folder.userId.toString() !== req.user.toString()) {
+//       return res.status(403).json({ message: 'Access denied' });
+//     }
+
+//     // Find the product in the folder's products array
+//     const productIndex = folder.products.findIndex(
+//       (product) => product._id.toString() === productId   
+//     );
+
+//     if (productIndex === -1) {
+//       return res.status(404).json({ message: 'Product not found in folder' });
+//     }
+
+//     // Remove the product from the array
+//     folder.products.splice(productIndex, 1);
+
+//     // Save the folder after removal
+//     await folder.save();
+
+//     // Return success message
+//     res.status(200).json({ message: 'Product successfully deleted from folder', folder });
+
+//   } catch (error) {
+//     console.error('Error deleting product from folder:', error);
+//     res.status(500).json({ message: 'Error deleting product from folder', error });
+//   }
+// };
+
+const deleteProductFromFolder = async (req, res) => {
+  try {
+    const { folderId, productId } = req.params;
+
+    // Validate folderId and productId format
+    if (!mongoose.Types.ObjectId.isValid(folderId) || !mongoose.Types.ObjectId.isValid(productId)) {
+      return res.status(400).json({ message: 'Invalid folder or product ID format' });
+    }
+
+    // Find the folder by ID
+    let folder = await ProductFolder.findById(folderId);
+
+    if (!folder) {
+      return res.status(404).json({ message: 'Folder not found' });
+    }
+
+    // Ensure the folder belongs to the logged-in user
+    if (folder.userId.toString() !== req.user.toString()) {
+      return res.status(403).json({ message: 'Access denied' });
+    }
+
+    // Find the product in the folder's products array
+    const productIndex = folder.products.findIndex(
+      (product) => product._id.toString() === productId
+    );
+
+    if (productIndex === -1) {
+      return res.status(404).json({ message: 'Product not found in folder' });
+    }
+
+    // Remove the product from the array
+    folder.products.splice(productIndex, 1);
+
+    // If the folder has no more products, delete the folder
+    if (folder.products.length === 0) {
+      await ProductFolder.findByIdAndDelete(folderId);
+      return res.status(200).json({ message: 'Product deleted and folder removed because it was empty' });
+    }
+
+    // Otherwise, save the folder after removal
+    await folder.save();
+
+    // Return success message
+    res.status(200).json({ message: 'Product successfully deleted from folder', folder });
+
+  } catch (error) {
+    console.error('Error deleting product from folder:', error);
+    res.status(500).json({ message: 'Error deleting product from folder', error });
+  }
+};
+
+
+
+
+
+
+module.exports = { createFolderForProduct, getAllFoldersForUser,getProductFolder,updateFolder, deleteFolder ,updateProductNote, deleteProductFromFolder};

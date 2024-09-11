@@ -75,6 +75,27 @@ const signIn = async (req, res, next) => {
     }
 };
 
+const getProfile = async (req, res, next) => {
+  try {
+      // Extract the user ID from the request (assuming the user is already authenticated via JWT)
+      const userId = req.user;
+
+      // Find the user by ID
+      const user = await User.findById(userId).select('-password'); // Exclude the password field from the response
+
+      if (!user) {
+          return res.status(404).json(response({ statusCode: 404, message: 'User not found', status: "Failed" }));
+      }
+
+      // Respond with the user profile data
+      res.status(200).json(response({ statusCode: 200, message: 'User profile fetched successfully', status: "OK", data: user }));
+
+  } catch (error) {
+      next(createError(response({ statusCode: 500, message: 'Internal server error', status: "Failed"})));
+  }
+};
+
+
 //Process forgot password
 const processForgetPassword = async (req, res, next) => {
     try {
@@ -177,4 +198,82 @@ const updatePassword = async (req, res) => {
     }
   };
 
-module.exports = {signUp, signIn, processForgetPassword, verifyOneTimeCode, updatePassword};
+
+  // With Image
+  // const updateUser = async (req, res) => {
+  //   try {
+  //     const { fullName, phoneNumber } = req.body;
+  //     const userId = req.user; // Assuming you're getting the user ID from a decoded JWT token
+  
+  //     // Find the user by ID
+  //     let user = await User.findById(userId);
+  
+  //     if (!user) {
+  //       return res.status(404).json({ message: 'User not found' });
+  //     }
+  
+  //     // Update user information
+  //     if (fullName) user.fullName = fullName;
+  //     // if (email) user.email = email;
+  //     if (phoneNumber) user.phoneNumber = phoneNumber;
+  
+  //     // If there's an image file in the request
+  //     if (req.file) {
+  //       const imagePath = req.file.path; // Assuming you are using multer or similar middleware for file uploads
+  //       user.profileImage = imagePath;
+        
+  //       // Example for Cloudinary image upload
+  //       // const result = await cloudinary.uploader.upload(imagePath, {
+  //       //   folder: 'user_profiles', // This is the folder in Cloudinary where images will be stored
+  //       // });
+  
+  //       // Update user's profile image with the Cloudinary secure URL
+  //       // user.profileImage = result.secure_url;
+  //     }
+  
+  //     // Save the updated user information
+  //     await user.save();
+  
+  //     // Return success response with updated user data
+  //     res.status(200).json({ message: 'User updated successfully', user });
+  
+  //   } catch (error) {
+  //     console.error('Error updating user:', error);
+  //     res.status(500).json({ message: 'Error updating user', error });
+  //   }
+  // };
+
+  // Without Image 
+  const updateUser = async (req, res) => {
+    try {
+      const { fullName, phoneNumber } = req.body;
+      const userId = req.user; // Assuming you're getting the user ID from a decoded JWT token
+  
+      // Find the user by ID
+      let user = await User.findById(userId);
+  
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+  
+      // Update user information
+      if (fullName) user.fullName = fullName;
+      if (phoneNumber) user.phoneNumber = phoneNumber;
+  
+      // Save the updated user information
+      await user.save();
+  
+      // Return success response with updated user data
+      res.status(200).json({ message: 'User updated successfully', user });
+  
+    } catch (error) {
+      console.error('Error updating user:', error);
+      res.status(500).json({ message: 'Error updating user', error });
+    }
+  };
+
+
+  
+  
+
+module.exports = {signUp, signIn,getProfile, processForgetPassword, verifyOneTimeCode, updatePassword, updateUser};

@@ -51,18 +51,18 @@ const getWishlist = async (req, res, next) => {
 
 const myWishlist = async (req, res, next) => {
   try {
-    const { userId } = req.query; // Assuming email is passed as a query parameter
-    console.log(req.query)
+    const { userId } = req.query; // Assuming userId is passed as a query parameter
 
     if (!userId) {
       return res.status(400).json({ message: "User Id is required" });
     }
 
-    const wishlist = await Wishlist.find({ userId });
+    // Find the wishlist and populate the 'productId' field with details from the 'Product' model
+    const wishlist = await Wishlist.find({ userId }).populate('productId'); // Populate productId with the Product model
 
-    if (!wishlist.length) {
-      return res.status(404).json({ message: "No wishlist found for this email" });
-    }
+    // if (!wishlist.length) {
+    //   return res.status(404).json({ message: "No wishlist found for this user" });
+    // }
 
     res.status(200).json({ wishlist });
   } catch (error) {
@@ -70,8 +70,33 @@ const myWishlist = async (req, res, next) => {
   }
 };
 
-module.exports = myWishlist;
+
+const removeWishlist = async (req, res, next) => {
+  try {
+    const { userId, productId } = req.body; // Assuming both userId and productId are passed in the request body
+
+    if (!userId || !productId) {
+      return res.status(400).json({ message: "User Id and Product Id are required" });
+    }
+
+    // Check if the product is in the user's wishlist
+    const existingWishlistItem = await Wishlist.findOne({ userId, productId });
+
+    if (!existingWishlistItem) {
+      return res.status(404).json({ message: "Product not found in wishlist" });
+    }
+
+    // Remove the product from the wishlist
+    await Wishlist.deleteOne({ userId, productId });
+
+    res.status(200).json({ message: "Product removed from wishlist successfully" });
+  } catch (error) {
+    console.error(error.message);
+    next(createError(error));
+  }
+};
 
 
 
-module.exports = { createWishlist, getWishlists, getWishlist, myWishlist }; 
+
+module.exports = { createWishlist, getWishlists, getWishlist, myWishlist, removeWishlist }; 
